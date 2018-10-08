@@ -1,0 +1,75 @@
+database_id           数据库id
+file_id             
+sample_ms
+num_of_reads          读的次数
+num_of_bytes_read     读取的数据量
+io_stall_read_ms      等待一次读的时间
+num_of_writes         写的次数
+num_of_bytes_written  写的数据量
+io_stall_write_ms     等待一次写的时间
+io_stall              等待一次I/O完成的时间
+size_on_disk_bytes    数据库大小
+file_handle 
+
+
+T_SAL_ORDERENTRY INNER JOIN T_SAL_ORDER ON T_SAL_ORDERENTRY.FID = T_SAL_ORDER.FID LEFT OUTER JOIN T_SAL_ORDERENTRY_F ON T_SAL_ORDERENTRY.FEntryID = T_SAL_ORDERENTRY_F.FEntryID LEFT OUTER JOIN T_SAL_ORDERENTRY_D ON T_SAL_ORDERENTRY.FEntryID = T_SAL_ORDERENTRY_D.FEntryID LEFT OUTER JOIN T_SAL_ORDERENTRY_R ON T_SAL_ORDERENTRY.FEntryID = T_SAL_ORDERENTRY_R.FEntryID LEFT OUTER JOIN T_SAL_ORDERENTRY_E ON T_SAL_ORDERENTRY.FEntryID = T_SAL_ORDERENTRY_E.FEntryID WHERE T_SAL_ORDER.FID = @PKValue;
+
+
+销售订单明细orderentry.fif通过单据内码内连接了销售订单order.fid的单据内码
+然后通过orderentry.fentryid分录内码左外连接销售订单明细_财务信息orderenrty_f.fentryid分录内码
+然后通过orderentry.fentryid分录内码左外连接销售订单明细_物料交货安排orderentry_d.fentryid分录内码
+然后通过orderentry.fentryid分录内码左外连接销售订单明细_关联信息orderentry_r.fentryid分录内码
+然后通过orderentry.fentryid分录内码左外连接销售订单明细_关联信息扩展表orderentry_e.fentryid分录内码
+
+
+
+T_SAL_ORDERDISCDETAIL INNER JOIN T_SAL_ORDERENTRY ON T_SAL_ORDERDISCDETAIL.FEntryID = T_SAL_ORDERENTRY.FEntryID INNER JOIN T_SAL_ORDER ON T_SAL_ORDERENTRY.FID = T_SAL_ORDER.FID WHERE T_SAL_ORDER.FID = @PKValue;
+销售订单折扣明细表orderdiscdetalt通过销售订单分录ID  orderdiscdetail,fentryid内连接了销售订单明细表里的分录内码orderenrty.fentryid
+销售订单明细表orderentry通过单据内码orderentry.fid内连接了销售订单的单据内码order.fid
+
+
+T_SAL_ORDERENTRYDELIPLAN INNER JOIN T_SAL_ORDERENTRY ON T_SAL_ORDERENTRYDELIPLAN.FEntryID = T_SAL_ORDERENTRY.FEntryID INNER JOIN T_SAL_ORDER ON T_SAL_ORDERENTRY.FID = T_SAL_ORDER.FID WHERE T_SAL_ORDER.FID = @PKValue;
+
+销售订单物料交货明细orderentrydeliplan表通过明细表的主键orderentrydeliplan.fentryid内连接了销售订单明细表orderentry.fentryid
+销售订单明细表通过orderentry.fid单据内码内连接了销售订单表的单据内码order.fid
+
+T_SAL_ORDERENTRYTAX INNER JOIN T_SAL_ORDERENTRY ON T_SAL_ORDERENTRYTAX.FEntryID = T_SAL_ORDERENTRY.FEntryID INNER JOIN T_SAL_ORDER ON T_SAL_ORDERENTRY.FID = T_SAL_ORDER.FID WHERE T_SAL_ORDER.FID = @PKValue;
+
+
+销售税订单组合表orderentrytax通过明细表的主键orderentrytax.fentryid内连接了销售订单明细表orderentry.fentryid分录内码
+销售订单明细表orderentry通过单据内码orderentry.fid内连接了销售订单order的单据内码order.fid
+
+T_SAL_ORDERENTRY_LK INNER JOIN T_SAL_ORDERENTRY ON T_SAL_ORDERENTRY_LK.FEntryID = T_SAL_ORDERENTRY.FEntryID INNER JOIN T_SAL_ORDER ON T_SAL_ORDERENTRY.FID = T_SAL_ORDER.FID WHERE T_SAL_ORDER.FID = @PKValue;
+
+
+销售订单新变更单明细关联表orderentry_lk通过当前分录ID  fentryid内连接了销售订单明细表fentryid
+销售订单明细表orderentry通过单据内码orderentry.fid内连接了销售订单表order的单据内码order.fid
+
+
+T_SAL_ORDERFIN INNER JOIN T_SAL_ORDER ON T_SAL_ORDERFIN.FID = T_SAL_ORDER.FID WHERE T_SAL_ORDER.FID = @PKValue;
+
+销售订单财务信息X变更表orderin通过单据内码orderin.fid内连接了销售订单表order.fid
+
+
+T_SAL_ORDERPLAN INNER JOIN T_SAL_ORDER ON T_SAL_ORDERPLAN.FID = T_SAL_ORDER.FID WHERE T_SAL_ORDER.FID = @PKValue;
+
+销售订单收款计划orderplan通过orderplan.fid单据内码内连接了销售订单表的单据内码order.fid
+
+
+T_SAL_ORDERPLANENTRY INNER JOIN T_SAL_ORDERPLAN ON T_SAL_ORDERPLANENTRY.FEntryID = T_SAL_ORDERPLAN.FEntryID INNER JOIN T_SAL_ORDER ON T_SAL_ORDERPLAN.FID = T_SAL_ORDER.FID WHERE T_SAL_ORDER.FID = @PKValue;
+
+销售订单收款计划明细X变更表orderplanentry通过收款计划内码fentryid内连接了销售收款计划表orderplan的收款计划内码fentryid
+销售订单收款计划orderplan通过orderplan.fid单据内码内连接了销售订单表的单据内码order.fid
+
+
+T_SAL_ORDERTRACE INNER JOIN T_SAL_ORDER ON T_SAL_ORDERTRACE.FID = T_SAL_ORDER.FID WHERE T_SAL_ORDER.FID = @PKValue;
+
+销售订单物流跟踪表ordertrace通过单据内码fid内连接了销售订单表的order.fid
+
+
+T_SAL_ORDERTRACEDETAIL INNER JOIN T_SAL_ORDERTRACE ON T_SAL_ORDERTRACEDETAIL.FEntryID = T_SAL_ORDERTRACE.FEntryID INNER JOIN T_SAL_ORDER ON T_SAL_ORDERTRACE.FID = T_SAL_ORDER.FID WHERE T_SAL_ORDER.FID = @PKValue;
+
+销售订单物流跟踪明细表ordertracealt通过分录内码fentryid内连接了销售订单物流跟踪表的分录内码ordertrace.fentryid
+销售订单物流跟踪表ordertrace通过单据内码fid内连接了销售订单表的order.fid
+
+
